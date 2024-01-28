@@ -6,6 +6,9 @@ const cors=require('cors');
 const movieModel = require('./models/Movie');
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
+const session = require('express-session');
+
+
 
 
 
@@ -14,6 +17,44 @@ app.use(express.json());
 app.use(cors());
 
 const JWT_SECRET_KEY='your-secret-key';
+
+
+app.use(express.json());
+app.use(
+    session({
+        secret: 'your-session-secret-key', // Replace with your actual session secret key
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
+// Assuming you have userModel and JWT_SECRET_KEY defined elsewhere in your code
+
+app.post('/userlogin', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Check if the user exists
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+
+        // Generate a JWT token
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
+
+        // Store user details in the session
+        req.session.user = { userId: user._id, name: user.name, email: user.email }; // Add other details as needed
+
+        res.json({ message: 'Login successful', token });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: `Internal Server Error - Login: ${error.message}` });
+    }
+});
+
+
 
 app.post('/uadd',(req,res)=>{
     const result= new  userModel(req.body)
@@ -25,6 +66,7 @@ app.get('/uview',async(req,res)=>{
     let result = await  userModel.find();
     res.json(result);
 })
+
 
 //Deleting a document 
 app.delete('/uremove/:id',async(req,res)=>{
@@ -62,24 +104,24 @@ app.delete('/Mremove/:id',async(req,res)=>{
     res.json({message:' movie deleted'})
 })
 
-app.post('/userlogin',async(req,res)=>{
-    try{
-        const {email,password} = req.body;
+// app.post('/userlogin',async(req,res)=>{
+//     try{
+//         const {email,password} = req.body;
 
-        //check if the user exists
-        const user = await userModel.findOne({email});
-        if(!user){
-            return res.status(401).json({message:'Invalid username or password'});
-        }
+//         //check if the user exists
+//         const user = await userModel.findOne({email});
+//         if(!user){
+//             return res.status(401).json({message:'Invalid username or password'});
+//         }
 
-        //generate a JWT token
-        const token = jwt.sign({userId: user._id},JWT_SECRET_KEY);
-        res.json({message:'Login successful', token});
-    }catch(error){
-        console.error(error.message);
-        res.status(500).json({ message: `Internal Server Error - Login: ${error.message}` });
-    }
-});
+//         //generate a JWT token
+//         const token = jwt.sign({userId: user._id},JWT_SECRET_KEY);
+//         res.json({message:'Login successful', token});
+//     }catch(error){
+//         console.error(error.message);
+//         res.status(500).json({ message: `Internal Server Error - Login: ${error.message}` });
+//     }
+// });
 //user register
 app.post('/register',async(req,res)=>{
     try{
@@ -114,12 +156,6 @@ app.post('/register',async(req,res)=>{
 });
 
 
-
-
-
-app.listen(3000,()=>{
-    console.log("port 3000 is up and running")
-})
 app.post('/Badd',(req,res)=>{
     const result= new  bookingModel(req.body)
     result.save();
@@ -131,4 +167,67 @@ app.get('/Bview',async(req,res)=>{
     let result = await  bookingModel.find();
     res.json(result);
 })
+
+
+app.delete('/Bremove/:id',async(req,res)=>{
+    console.log(req.params);
+    let id=req.params.id
+    await  bookingModel.findByIdAndDelete(id);
+    res.json({message:' movie deleted'})
+})
+
+
+app.get('/getMoviesCount', async (req, res) => {
+    try {
+      const count = await movieModel.countDocuments();
+      res.json({ count });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/getBookingscount', async (req, res) => {
+    try {
+      const count = await bookingModel.countDocuments();
+      res.json({ count });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/getUserscount', async (req, res) => {
+    try {
+      const count = await userModel.countDocuments();
+      res.json({ count });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+
+  
+  
+
+
+  
+  
+  
+app.listen(3000,()=>{
+    console.log("port 3000 is up and running")
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
