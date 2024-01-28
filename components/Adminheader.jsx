@@ -37,7 +37,7 @@ const Header = () => {
             </Button>
             
             <Button variant="contained" color="primary" sx={{ marginRight: 1, "& a": { textDecoration: "none", color: "white" } }}>
-              <Link to="/login">Auth</Link>
+              <Link to="/login">A</Link>
             </Button>
             
             <Button variant="contained" color="primary" sx={{ "& a": { textDecoration: "none", color: "white" } }}>
