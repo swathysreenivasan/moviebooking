@@ -2,58 +2,85 @@
 import './App.css';
 
 import { Route,Routes } from 'react-router-dom';
-import Header from './components/Header';
+
 import Homepage from './components/Homepage';
 import Admin from './components/Admin';
 import User from './components/User';
 import Viewmovie from './components/Viewmovie';
-import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import Userhome from './components/Userhome';
+import Usermovie from './components/Usermovie';
+import Userbooking from './components/Userbooking';
+
+import UserProfile from './components/Userprofile';
+import Logout from './components/Logout';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
+import Adminmovies from './components/Adminmovies';
+import AdminUsers from './components/Adminusers';
+import Adminbookings from './components/Adminbookings';
+import AddMovies from './components/Addmovies';
+
+
+
+
+
+
 function App() {
+
+
+  
   return (
   <>
-    <Header/>
+    {/* <Header/> */}
+    
     <section>
       <Routes>
-      <Route path="/Homepage" element={<Homepage/>} />
+      <Route path="/" element={<Homepage/>} />
        <Route path="/movies" element={<Viewmovie/>}/>
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/user" element={<User/>}/>
-        <Route path="/register" element={<RegisterForm />}/>
         <Route path="/login" element={<LoginForm/>}/>
-      </Routes>
+          <Route path="/register" element={<RegisterForm/>}/>
+          <Route path="/Userhome" element={<Userhome/>}/>
+          <Route path="/Usermovie" element={<Usermovie/>}/>
+          
+          <Route path="/Userbooking" element={<Userbooking/>}/>
+          <Route path="/Userprofile" element={<UserProfile/>}/>
+          <Route path="/logout" element={<Logout/>}/>
+          <Route path="/Adminlogin" element={<AdminLogin/>}/>
+          <Route path="/AdminDashboard" element={<AdminDashboard/>}/>
+          
+          <Route path="/Adminmovies" element={<Adminmovies/>}/>
+          <Route path="/Adminusers" element={<AdminUsers/>}/>
+          <Route path="/Adminbookings" element={<Adminbookings/>}/>
+          <Route path="/Addmovies" element={<AddMovies/>}/>
+          
+         
+         
+          </Routes>
     </section>
+   
+    
     
     </>
   );
-}
-
+  }
 export default App;
 
 
 
-// import './App.css';
-// import { Route, Routes, Navigate } from 'react-router-dom';
-// import Main from './components/Main';
-// import Signup from './components/Signup';
-// import Login from './components/Login';
 
 
 
-// function App() {
-//   const user = localStorage.getItem("token");
 
-//   return (
-//     <Routes>
-//     {user && <Route path="/" element={<Main />} />}
-//     <Route path="/signup" element={<Signup />} />
-//     <Route path="/login" element={<Login />} /> 
-//     {!user && <Route path="/" element={<Navigate replace to="/login" />} />}
-//   </Routes>
-// );
-// }
 
-// export default App;
+
+
+
+
+
 
 
 
